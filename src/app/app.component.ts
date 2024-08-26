@@ -1,12 +1,14 @@
 import { AsyncPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { AddBtnComponent } from './button/add-btn/add-btn.component';
 import { TaskService } from './services/task.service';
+import { ThemeService } from './services/theme.service';
 import { TaskActions } from './task/store/task.actions';
 import { Task } from './task/store/task.model';
 import {
@@ -22,6 +24,7 @@ import { TaskList } from './task/task-list.component';
     RouterOutlet,
     AsyncPipe,
     NzMessageModule,
+    NzIconModule,
     NzInputModule,
     TaskList,
     ReactiveFormsModule,
@@ -37,6 +40,8 @@ export class AppComponent {
     task: new FormControl(''),
     completed: new FormControl(false),
   });
+
+  themeService = inject(ThemeService);
 
   constructor(
     private taskService: TaskService,

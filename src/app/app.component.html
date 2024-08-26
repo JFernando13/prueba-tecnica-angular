@@ -1,18 +1,31 @@
 <main class="grid gap-6 px-8 py-6">
-  <form
-    class="flex gap-3 justify-center mx-auto items-center max-w-96 w-full"
-    [formGroup]="taskForm"
-    (ngSubmit)="onSubmit()"
-  >
-    <input
-      type="text"
-      nz-input
-      class="rounded-md"
-      placeholder="Enter your new task"
-      formControlName="task"
-    />
-    <add-btn />
-  </form>
+  <header class="flex">
+    <form
+      class="flex gap-3 justify-center mx-auto items-center max-w-96 w-full"
+      [formGroup]="taskForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <input
+        type="text"
+        nz-input
+        class="rounded-md dark:bg-gray-900 dark:text-white border-none"
+        placeholder="Enter your new task"
+        formControlName="task"
+      />
+      <add-btn />
+    </form>
+
+    <menu class="flex gap-2">
+      <button
+        (click)="themeService.setTheme()"
+        class="dark:bg-gray-950 bg-gray-300 text-black p-2 rounded-lg dark:text-white"
+      >
+        @if (themeService.currentTheme() === "light") {
+        <span nz-icon nzType="sun" nzTheme="outline"></span>
+        } @else {<span nz-icon nzType="moon" nzTheme="outline"></span> }
+      </button>
+    </menu>
+  </header>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <task-list
       [tasks]="(completedTasks$ | async) ?? []"

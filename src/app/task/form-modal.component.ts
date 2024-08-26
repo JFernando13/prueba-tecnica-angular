@@ -10,6 +10,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { AddBtnComponent } from '../button/add-btn/add-btn.component';
 import { TaskService } from '../services/task.service';
 import { Task } from './store/task.model';
 
@@ -23,6 +24,7 @@ import { Task } from './store/task.model';
     ReactiveFormsModule,
     NzMessageModule,
     NzIconModule,
+    AddBtnComponent,
   ],
   template: `
     <button nz-button nzType="primary" nzGhost (click)="showModal($event)">
@@ -35,7 +37,9 @@ import { Task } from './store/task.model';
       [nzFooter]="null"
       (nzOnCancel)="handleCancel()"
     >
-      <ng-template #modalTitle>Edit Task</ng-template>
+      <ng-template #modalTitle>
+        <h2>Edit Task</h2>
+      </ng-template>
 
       <ng-template #modalContent>
         <form
@@ -50,9 +54,7 @@ import { Task } from './store/task.model';
             placeholder="Edit your task"
             formControlName="editTask"
           />
-          <button nz-button nzType="primary" class="rounded-md">
-            <span nz-icon nzType="check-circle" nzTheme="outline"></span>
-          </button>
+          <add-btn />
         </form>
       </ng-template>
     </nz-modal>

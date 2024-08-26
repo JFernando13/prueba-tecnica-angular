@@ -11,9 +11,9 @@ import { Task } from './store/task.model';
   template: `
     <section class="grid gap-3">
       <div class="flex gap-2 items-center">
-        <h2 class="text-lg font-semibold">{{ title }}</h2>
+        <h2 class="text-lg font-semibold dark:text-white">{{ title }}</h2>
         <span
-          class="p-1.5 rounded-lg bg-gray-700 text-xs font-bold text-white"
+          class="p-1.5 rounded-lg bg-gray-700 dark:bg-gray-700 text-xs font-bold text-white"
           >{{ tasks.length }}</span
         >
       </div>
@@ -21,11 +21,11 @@ import { Task } from './store/task.model';
         @for(task of tasks; track task.id) {
 
         <article
-          class="bg-white rounded-lg px-4 py-3 gap-4 flex justify-between items-center cursor-pointer hover:scale-105 transition-all hover:border-gray-500 border-2 border-solid duration-300"
+          class="bg-white rounded-lg px-4 py-3 gap-4 flex justify-between items-center cursor-pointer hover:scale-105 transition-all hover:border-gray-500 border-2 border-solid duration-300 dark:bg-gray-700 dark:border-gray-900"
           (click)="edit.emit(task)"
         >
-          <hgroup class="flex flex-col-reverse">
-            <h2 class="first-letter:uppercase font-semibold">
+          <hgroup class="flex flex-col-reverse ">
+            <h2 class="first-letter:uppercase font-semibold dark:text-white">
               {{ task.title }}
             </h2>
             <p class="text-xs font-thin flex gap-1 items-center">
