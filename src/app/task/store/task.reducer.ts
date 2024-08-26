@@ -34,8 +34,6 @@ export const taskFeature = createFeature({
       };
     }),
     on(TaskActions.edit, (state, { id, putTask }) => {
-      console.log('NO ESTA LLEGANOD', id, putTask);
-
       return {
         tasks: state.tasks.map((task) =>
           task.id === id ? { ...task, ...putTask } : task
@@ -44,14 +42,36 @@ export const taskFeature = createFeature({
     })
   ),
   extraSelectors: ({ selectTasks }) => ({
-    selectCompletedTasks: createSelector(selectTasks, (tasks) =>
-      tasks.filter((task) => task.completed).reverse()
-    ),
-    selectUncompletedTasks: createSelector(selectTasks, (tasks) =>
-      tasks.filter((task) => !task.completed).reverse()
-    ),
+    selectCompletedTasks: (userId?: number) =>
+      createSelector(selectTasks, (tasks) => {
+        if (userId) {
+          return tasks
+            .filter((task) => task.userId === userId && task.completed)
+            .reverse();
+        }
+
+        return tasks.filter((task) => task.completed).reverse();
+      }),
+    selectUncompletedTasks: (userId?: number) =>
+      createSelector(selectTasks, (tasks) => {
+        if (userId) {
+          return tasks
+            .filter((task) => task.userId === userId && !task.completed)
+            .reverse();
+        }
+
+        return tasks.filter((task) => !task.completed).reverse();
+      }),
+    selectUsers: createSelector(selectTasks, (tasks) => {
+      const users = tasks.map((task) => task.userId);
+      return Array.from(new Set(users));
+    }),
   }),
 });
 
-export const { selectTasks, selectCompletedTasks, selectUncompletedTasks } =
-  taskFeature;
+export const {
+  selectTasks,
+  selectCompletedTasks,
+  selectUncompletedTasks,
+  selectUsers,
+} = taskFeature;

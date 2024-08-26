@@ -1,21 +1,47 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 import { FormModalComponent } from './form-modal.component';
 import { Task } from './store/task.model';
+import { selectUsers } from './store/task.reducer';
 
 @Component({
   standalone: true,
   selector: 'task-list',
-  imports: [NzButtonModule, NzIconModule, FormModalComponent],
+  imports: [
+    NzButtonModule,
+    NzIconModule,
+    FormModalComponent,
+    NzSelectModule,
+    AsyncPipe,
+    FormsModule,
+  ],
   template: `
     <section class="grid gap-3">
-      <div class="flex gap-2 items-center">
-        <h2 class="text-lg font-semibold dark:text-white">{{ title }}</h2>
-        <span
-          class="p-1.5 rounded-lg bg-gray-700 dark:bg-gray-700 text-xs font-bold text-white"
-          >{{ tasks.length }}</span
+      <div class="flex justify-between">
+        <div class="flex gap-2 items-center">
+          <h2 class="text-lg font-semibold dark:text-white">{{ title }}</h2>
+          <span
+            class="p-1.5 rounded-lg bg-gray-700 dark:bg-gray-700 text-xs font-bold text-white"
+            >{{ tasks.length }}</span
+          >
+        </div>
+
+        <nz-select
+          nzAllowClear
+          nzPlaceHolder="Select a user"
+          [(ngModel)]="selectedUser"
+          [nzId]="title"
+          (ngModelChange)="changeUser.emit($event)"
         >
+          @for (user of users$ | async; track user) {
+          <nz-option [nzLabel]="'User: ' + user" [nzValue]="user"></nz-option>
+          }
+        </nz-select>
       </div>
       <section class="grid gap-2 rounded-md">
         @for(task of tasks; track task.id) {
@@ -29,6 +55,8 @@ import { Task } from './store/task.model';
               {{ task.title }}
             </h2>
             <p class="text-xs font-thin flex gap-1 items-center">
+              <span>User {{ task.userId }}</span>
+              <span>•</span>
               <span>{{ task.completed ? 'Completed' : 'Uncompleted' }}</span>
               <span
                 class="rounded-[100vh] h-2 w-2 block"
@@ -71,4 +99,11 @@ export class TaskList {
 
   @Output()
   edit = new EventEmitter<Task>();
+
+  @Output()
+  changeUser = new EventEmitter<number>();
+
+  selectedUser = null;
+
+  users$ = inject(Store).select(selectUsers);
 }

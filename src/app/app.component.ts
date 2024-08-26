@@ -52,8 +52,8 @@ export class AppComponent {
       this.store.dispatch(TaskActions.retrieve({ tasks: data }));
     });
 
-    this.completedTasks$ = this.store.select(selectCompletedTasks);
-    this.uncompletedTasks$ = this.store.select(selectUncompletedTasks);
+    this.completedTasks$ = this.store.select(selectCompletedTasks());
+    this.uncompletedTasks$ = this.store.select(selectUncompletedTasks());
   }
 
   onRemove(id: string) {
@@ -66,6 +66,13 @@ export class AppComponent {
 
   onEdit(task: Task) {
     this.taskService.editTaskCompleted(task);
+  }
+
+  onChangeUserCompleted(userId: number) {
+    this.completedTasks$ = this.store.select(selectCompletedTasks(userId));
+  }
+  onChangeUserUncompleted(userId: number) {
+    this.uncompletedTasks$ = this.store.select(selectUncompletedTasks(userId));
   }
 
   onSubmit() {

@@ -27,17 +27,26 @@
     </menu>
   </header>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    @defer () {
     <task-list
       [tasks]="(completedTasks$ | async) ?? []"
       title="Completed"
       (remove)="onRemove($event)"
       (edit)="onEdit($event)"
+      (changeUser)="onChangeUserCompleted($event)"
     />
+    } @placeholder {
+    <div>Loading data...</div>
+    } @defer () {
     <task-list
       [tasks]="(uncompletedTasks$ | async) ?? []"
       (remove)="onRemove($event)"
       title="Uncompleted"
       (edit)="onEdit($event)"
+      (changeUser)="onChangeUserUncompleted($event)"
     />
+    } @placeholder {
+    <div>Loading data...</div>
+    }
   </div>
 </main>

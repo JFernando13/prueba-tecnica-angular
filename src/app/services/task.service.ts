@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
-import { Task } from '../task/store/task.model';
 import { TaskActions } from '../task/store/task.actions';
+import { Task } from '../task/store/task.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
@@ -14,9 +14,10 @@ export class TaskService {
       .get<Task[]>('https://jsonplaceholder.typicode.com/todos')
       .pipe(
         map((tasks) =>
-          tasks.splice(0, 20).map((task) => ({
+          tasks.map((task) => ({
             ...task,
             id: crypto.randomUUID(),
+            priority: Math.floor(Math.random() * 50),
           }))
         )
       );
